@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>確認画面</title>
+</head>
+
+<body>
+    <p>入力内容を確認し、問題なければ「送信」ボタンを押下してください。</p>
+    <form action="{% url 'regist' %}" method="post">
+        {% csrf_token %}
+        <table>
+            <!-- 氏名 -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.name.label_tag }}</td>
+                <td>{{ input_form.name.value }}</td>
+            </tr>
+            <!-- 生年月日 -->
+            <tr>
+                <td align="left" valign="top">
+                    {{ input_form.birth_day.label_tag }}
+                </td>
+                <td>{{ lbl_birth_day }}</td>
+            </tr>
+            <!-- 性別 -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.sex.label_tag }}</td>
+                <td>{{ lbl_sex }}</td>
+            </tr>
+            <!-- メモ -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.memo.label_tag }}</td>
+                <!-- テキストエリアの改行を有効にするため、「| linebreaksbr」を付与 -->
+                <td>{{ input_form.memo.value | linebreaksbr }}</td>
+            </tr>
+            <!-- 入力確認 -->
+            <tr>
+                <td align="left" valign="top">{{ input_form.check.label_tag }}</td>
+                <td>{{ lbl_checked }}</td>
+            </tr>
+        </table>
+        <br /><br />
+        <!-- フォームの各値を次画面に渡すためhidden項目を設定 -->
+        {% for field in input_form %}
+        {{field.as_hidden}}
+        {% endfor %}
+        <input type="submit" name="send" value="送信" />
+        <input type="submit" name="back" value="戻る" />
+    </form>
+</body>
+
+</html>

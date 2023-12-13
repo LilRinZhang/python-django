@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>入力画面</title>
+    <!-- BootStrap CSS/JSファイルの読み込み -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'demo/css/bootstrap.min.css' %}">
+    <script src="{% static 'demo/js/bootstrap.bundle.min.js' %}"></script>
+</head>
+
+<body>
+    <!-- 画面サイズを画面幅いっぱい(container-fluid)とし、marginを上下左右に設定 -->
+    <div class="container-fluid m-4">
+        <!-- タイトル行の文字サイズを設定 -->
+        <p class="fs-4">下記必要事項を記載の上、「確認」ボタンを押下してください。</p>
+
+        <!-- action属性のURLで、urls.pyの画面遷移先のname属性の値を指定している -->
+        <form action="{% url 'confirm' %}" method="post">
+            <!-- 下記csrf_tokenは、CSRF対策を行うことでform送信時エラーを防ぐために設定 -->
+            {% csrf_token %}
+
+            <!-- 表の幅を、画面横幅の9/12の長さに設定 -->
+            <div class="col-9">
+                <!-- テーブルの枠線を非表示に設定 -->
+                <table class="table table-borderless">
+                    <!-- 名前 -->
+                    <tr>
+                        <!-- 画面幅が広くなるにつれてラベルのサイズを狭める設定 -->
+                        <td class="col-md-4 col-lg-2">
+                            <!-- フォームとラベルの関連付けを設定 -->
+                            <label for="name" class="form-label">
+                                {{ form.name.label_tag }}
+                            </label>
+                        </td>
+                        <td>
+                            <span id="name" class="form-label">
+                                {{ form.name }}
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- 生年月日 -->
+                    <tr>
+                        <td>{{ form.birth_day.label_tag }}</td>
+                        <td>
+                            {{ form.birth_year }}年
+                            {{ form.birth_month }}月
+                            {{ form.birth_day }}日
+                            <!-- 生年月日の入力チェックエラーを表示 -->
+                            <span class="text-danger">
+                                {{ form.non_field_errors.0 }}
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- 性別 -->
+                    <tr>
+                        <td>{{ form.sex.label_tag }}</td>
+                        <td>
+                            {% for sex_choice in form.sex %}
+                            <span class="me-2">
+                                {{ sex_choice.choice_label }}
+                                {{ sex_choice.tag }}
+                            </span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <!-- メモ -->
+                    <tr>
+                        <td>
+                            <label for="memo" class="form-label">
+                                {{ form.memo.label_tag }}
+                            </label>
+                        </td>
+                        <td>
+                            <span id="memo" class="form-label">
+                                {{ form.memo }}
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- 入力確認 -->
+                    <tr>
+                        <td>
+                            <label for="check" class="form-label">
+                                {{ form.check.label_tag }}
+                            </label>
+                        </td>
+                        <td>
+                            <span id="check" class="form-label">
+                                {{ form.check }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- ユーザーID -->
+            <!-- 一覧画面で更新リンクを押下したため、object.idが設定されている場合 -->
+            {% if object.id %}
+            <input type="hidden" name="user_id" value="{{ object.id }}" />
+            <!-- 入力画面で入力チェックエラーが発生したり、確認画面で戻るボタンを
+                     押下したため、user_idが設定されている場合 -->
+            {% elif user_id %}
+            <input type="hidden" name="user_id" value="{{ user_id }}" />
+            <!-- 一覧画面でデータ追加ボタンを押下したため、object.idもuser_idも
+                     設定されていない場合 -->
+            {% else %}
+            <input type="hidden" name="user_id" value="" />
+            {% endif %}
+
+            <!-- marginを上に設定 -->
+            <div class="mt-5">
+                <!-- ボタンの色を青色に設定 -->
+                <input type="submit" name="confirm" value="確認" class="btn btn-primary" />
+                <!-- marginを左に設定 -->
+                <span class="ms-4">
+                    <a href="{% url 'list' %}" class="btn btn-primary">戻る</a>
+                </span>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

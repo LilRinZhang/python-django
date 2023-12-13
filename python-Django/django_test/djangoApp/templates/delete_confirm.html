@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>削除確認画面</title>
+    <!-- BootStrap CSS/JSファイルの読み込み -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'demo/css/bootstrap.min.css' %}">
+    <script src="{% static 'demo/js/bootstrap.bundle.min.js' %}"></script>
+</head>
+
+<body>
+    <!-- 画面サイズを画面幅いっぱい(container-fluid)とし、marginを上下左右に設定 -->
+    <div class="container-fluid m-4">
+        <!-- タイトル行の文字サイズを設定 -->
+        <p class="fs-4">下記データを削除する場合は、「削除」ボタンを押下してください。</p>
+
+        <form method="post">
+            <!-- 下記csrf_tokenは、CSRF対策を行うことでform送信時エラーを防ぐために設定 -->
+            {% csrf_token %}
+
+            <!-- 表の幅を、画面横幅の8/12の長さに設定 -->
+            <div class="col-8">
+                <!-- テーブルの枠線を非表示に設定 -->
+                <table class="table table-borderless">
+                    <!-- 名前 -->
+                    <tr>
+                        <!-- 画面幅が広い場合にラベルのサイズを狭める設定 -->
+                        <td class="col-md-4 col-lg-2">
+                            名前:
+                        </td>
+                        <td>{{ object.name }}</td>
+                    </tr>
+                    <!-- 生年月日 -->
+                    <tr>
+                        <td>生年月日:</td>
+                        <td>
+                            {{ object.birth_year }}年
+                            {{ object.birth_month }}月
+                            {{ object.birth_day }}日
+                        </td>
+                    </tr>
+                    <!-- 性別 -->
+                    <tr>
+                        <td>性別:</td>
+                        <td>
+                            {% if object.sex|stringformat:"s" == "1" %}
+                            男
+                            {% elif object.sex|stringformat:"s" == "2" %}
+                            女
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <!-- メモ -->
+                    <tr>
+                        <td>メモ:</td>
+                        <td>
+                            <!-- 「| default:""」で、Noneを空文字に置き換える -->
+                            <!-- テキストエリアの改行を有効にするため、「| linebreaksbr」を付与 -->
+                            {{ object.memo | default:"" | linebreaksbr }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- marginを上に設定 -->
+            <div class="mt-5">
+                <!-- 削除ボタンの色を赤色に設定 -->
+                <input type="submit" value="削除" class="btn btn-danger" />
+                <!-- marginを左に設定 -->
+                <span class="ms-4">
+                    <!-- 戻るボタンの色を青色に設定 -->
+                    <a href="{% url 'list' %}" class="btn btn-primary">戻る</a>
+                </span>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

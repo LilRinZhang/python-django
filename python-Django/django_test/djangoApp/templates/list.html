@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>一覧画面</title>
+    <!-- BootStrap CSS/JSファイルの読み込み -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'demo/css/bootstrap.min.css' %}">
+    <script src="{% static 'demo/js/bootstrap.bundle.min.js' %}"></script>
+</head>
+
+<body>
+    <!-- 画面サイズを画面幅いっぱい(container-fluid)とし、marginを上下左右に設定 -->
+    <div class="container-fluid m-4">
+        <!-- タイトル行の文字サイズを設定 -->
+        <p class="fs-4">ユーザーデータテーブル(user_data)の検索データ</p>
+
+        <!-- 表の幅を、画面横幅の11/12の長さに設定 -->
+        <div class="col-11">
+            <!-- テーブルの1行おきに背景色を設定 -->
+            <table class="table table-striped">
+                <!-- テーブルのタイトル行を水色に設定 -->
+                <tr class="table-info">
+                    <th>ID</th>
+                    <th>名前</th>
+                    <th>生年月日</th>
+                    <th>性別</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <!-- 検索条件に合うデータを一覧画面に表示 -->
+                {% for user in user_list %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.birth_year }}年
+                        {{ user.birth_month }}月
+                        {{ user.birth_day }}日
+                    </td>
+                    <td>
+                        {% if user.sex|stringformat:"s" == "1" %}
+                        男
+                        {% elif user.sex|stringformat:"s" == "2" %}
+                        女
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'update' user.id %}">更新</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete' user.id %}">削除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- action属性のURLで、(demoフォルダ内)urls.pyの画面遷移先のname属性の値を指定している -->
+        <form action="{% url 'input' %}" method="post">
+            <!-- 下記csrf_tokenは、CSRF対策を行うことでform送信時エラーを防ぐために設定 -->
+            {% csrf_token %}
+            <!-- marginを上に設定 -->
+            <div class="mt-5">
+                <!-- ボタンの色を青色に設定 -->
+                <input type="submit" name="next" value="データ追加" class="btn btn-primary" />
+                <!-- marginを左に設定 -->
+                <span class="ms-4">
+                    <input type="button" name="back" value="検索画面に戻る" class="btn btn-primary"
+                        onclick="location.href='./index.html'" />
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

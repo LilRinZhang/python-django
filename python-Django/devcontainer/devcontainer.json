@@ -1,0 +1,17 @@
+{
+    // コンテナ名
+    "name": "django_sample",
+    // 使用するDockerfileを設定
+    "dockerFile": "../Dockerfile",
+    //"dockerComposeFile": [
+    //    "../docker-compose.yml"
+    //],
+    //"service": "django_template",
+    //"workspaceFolder": "/usr/src/app",
+    // VSCodeで使用する拡張機能を設定
+    "extensions": [
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+    ],
+}

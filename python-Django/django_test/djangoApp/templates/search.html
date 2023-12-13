@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>検索画面</title>
+    <!-- BootStrap CSS/JSファイルの読み込み -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'demo/css/bootstrap.min.css' %}">
+    <script src="{% static 'demo/js/bootstrap.bundle.min.js' %}"></script>
+</head>
+
+<body>
+    <!-- 画面サイズを画面幅いっぱい(container-fluid)とし、marginを上下左右に設定 -->
+    <div class="container-fluid m-4">
+        <!-- タイトル行の文字サイズを設定 -->
+        <p class="fs-4">検索条件を指定し、「検索」ボタンを押下してください。</p>
+
+        <!-- action属性のURLで、(demoフォルダ内)urls.pyの画面遷移先のname属性の値を指定している -->
+        <form action="{% url 'search' %}" method="post">
+            <!-- 下記csrf_tokenは、CSRF対策を行うことでform送信時エラーを防ぐために設定 -->
+            {% csrf_token %}
+
+            <!-- 表の幅を、画面横幅の9/12の長さに設定 -->
+            <div class="col-9">
+                <!-- テーブルの枠線を非表示に設定 -->
+                <table class="table table-borderless">
+                    <!-- 名前 -->
+                    <tr>
+                        <!-- 画面幅が広くなるにつれてラベルのサイズを狭める設定 -->
+                        <td class="col-md-4 col-lg-2">
+                            <!-- フォームとラベルの関連付けを設定 -->
+                            <label for="name" class="form-label">
+                                {{ form.name.label_tag }}
+                            </label>
+                        </td>
+                        <td>
+                            <span id="name" class="form-label">
+                                {{ form.name }}
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- 生年月日(From, To) -->
+                    <tr>
+                        <td align="left" valign="top">
+                            {{ form.birth_day_from_year.label_tag }}
+                        </td>
+                        <td>
+                            {{ form.birth_day_from_year }}年
+                            {{ form.birth_day_from_month }}月
+                            {{ form.birth_day_from_day }}日～
+                            {{ form.birth_day_to_year }}年
+                            {{ form.birth_day_to_month }}月
+                            {{ form.birth_day_to_day }}日
+                            <!-- 生年月日の入力チェックエラーを表示 -->
+                            <span class="text-danger">
+                                <br />{{ form.non_field_errors.0 }}
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- 性別 -->
+                    <tr>
+                        <td>{{ form.sex.label_tag }}</td>
+                        <td>
+                            {% for sex_choice in form.sex %}
+                            <span class="me-2">
+                                {{ sex_choice.choice_label }}
+                                {{ sex_choice.tag }}
+                            </span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- marginを上に設定 -->
+            <div class="mt-5">
+                <!-- ボタンの色を青色に設定 -->
+                <input type="submit" name="next" value="検索" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

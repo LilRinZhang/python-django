@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>完了画面</title>
+    <!-- BootStrap CSS/JSファイルの読み込み -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'demo/css/bootstrap.min.css' %}">
+    <script src="{% static 'demo/js/bootstrap.bundle.min.js' %}"></script>
+</head>
+
+<body>
+    <!-- 画面サイズを画面幅いっぱい(container-fluid)とし、marginを上下左右に設定 -->
+    <div class="container-fluid m-4">
+        <!-- タイトル行の文字サイズを設定 -->
+        <p class="fs-4">お申し込みが完了しました。</p>
+
+        <!-- marginを上に設定 -->
+        <div class="mt-5">
+            <!-- ボタンの色を青色に設定 -->
+            <a href="{% url 'index' %}" class="btn btn-primary">検索画面に戻る</a>
+        </div>
+    </div>
+</body>
+
+</html>
